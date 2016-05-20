@@ -2,16 +2,21 @@
 #ifndef RESPONSE_H
 #define RESPONSE_H
 
-#include <string>
+#import <string>
+
+#import "contentType.hpp"
+#import "statusCode.hpp"
+#import "metadata.hpp"
 
 class Response {
 
 private:
+    Metadata metadata;
     std::string content;
 
 public:
-    Response(std::string content);
-    std::string getContent();
+    Response(StatusCode status, ContentType type, std::string content);
+    std::string write();
 
 };
 
