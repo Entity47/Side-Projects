@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <memory>
 
 #include "server.hpp"
 #include "response/response.hpp"
@@ -20,8 +21,9 @@ void Server::listen() {
         tcp::socket socket(io_service);
         acceptor.accept(socket);
 
-        std::string content = "<!DOCTYPE HTML><html><head><title>Title</title></head><body><p>TEST</p></body></html>";
-        Response response(StatusCode::OK, ContentType::HTML, content);
+        auto content_p = std::unique_ptr<std::string>(new std::string("<!DOCTYPE HTML><html><head><title>Title</title></head><body><p>TEST</p></body></html>"));
+        Response response(StatusCode::OK);
+        response.setContent(std::move(content_p), ContentType::HTML);
         std::string responseText = response.write();
 
         boost::system::error_code ignored_error;

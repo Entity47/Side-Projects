@@ -1,15 +1,28 @@
 
-#import "response.hpp"
+#include "response.hpp"
 
-Response::Response(StatusCode status, ContentType type, std::string content) :
-    metadata{Metadata(status, type)}, content{content} {
+Response::Response(StatusCode status) :
+    metadata{Metadata(status)},
+    content{nullptr} {
+}
 
+void Response::setContent(std::unique_ptr<std::string> inContent, ContentType type) {
+    if (inContent != nullptr) {
+        metadata.addHeader("Content-Type", ContentTypeMap::getDescription(type));
+
+        content = std::move(inContent);
+        auto contentLength = content->size();
+        metadata.addHeader("Content-Length", std::to_string(contentLength));
+    }
 }
 
 std::string Response::write() {
     std::string message{metadata.write()};
     message += "\r\n";
-    message += content;
+
+    if (content != nullptr) {
+        message += *content;
+    }
 
     return message;
 }
