@@ -7,13 +7,14 @@
 
 #include "contentType.hpp"
 #include "statusCode.hpp"
-#include "metadata.hpp"
+#include "../headers.hpp"
 #include "contentType.hpp"
 
 class Response {
 
 private:
-    Metadata metadata;
+    StatusCode statusCode;
+    Headers headers;
     std::unique_ptr<std::string> content;
 
 public:
