@@ -5,7 +5,7 @@ CFLAGS += -std=c++11
 
 CC = clang++
 
-FILES = main.cpp server.cpp http/*.cpp http/response/*.cpp http/request/*.cpp
+FILES = *.cpp http/*.cpp http/response/*.cpp http/request/*.cpp
 
 build: $(FILES)
 	$(CC) $(CFLAGS) $(FILES)
