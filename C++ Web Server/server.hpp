@@ -11,7 +11,7 @@ class Server {
     tcp::acceptor acceptor;
 
 public:
-    Server();
+    Server(int port);
     void listen();
 
 };

@@ -12,12 +12,12 @@ class Request {
 private:
     Method method;
     std::string resource;
-    std::string httpVersion;
     Headers headers;
 
 public:
-    void setMethod(Method m);
-    void addheader(std::string name, std::string value);
+    Request(Method m, std::string resource);
+    void addHeader(std::string name, std::string value);
+    std::string toString();
 };
 
 #endif

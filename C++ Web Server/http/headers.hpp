@@ -13,6 +13,7 @@ private:
 public:
     void add(std::string header, std::string headerValue);
     std::string write();
+    std::string toString();
 
 };
 
