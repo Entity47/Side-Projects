@@ -6,13 +6,12 @@ void Headers::add(std::string header, std::string headerValue) {
     headers[header] = headerValue;
 }
 
-std::string Headers::write() {
-    std::string message;
-    for (auto header_entry : headers) {
-        message += header_entry.first + ": " + header_entry.second + "\r\n";
-    }
+std::map<std::string, std::string>::const_iterator Headers::begin() const {
+    return headers.cbegin();
+}
 
-    return message;
+std::map<std::string, std::string>::const_iterator Headers::end() const {
+    return headers.cend();
 }
 
 std::string Headers::toString() {

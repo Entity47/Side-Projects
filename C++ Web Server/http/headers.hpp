@@ -12,7 +12,8 @@ private:
 
 public:
     void add(std::string header, std::string headerValue);
-    std::string write();
+    std::map<std::string, std::string>::const_iterator begin() const;
+    std::map<std::string, std::string>::const_iterator end() const;
     std::string toString();
 
 };

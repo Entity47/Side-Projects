@@ -1,6 +1,7 @@
 
-#include "connection.hpp"
+#include <iostream>
 
+#include "connection.hpp"
 #include "request/method.hpp"
 #include "response/response.hpp"
 #include "response/statusCode.hpp"
@@ -14,48 +15,30 @@ Connection::Connection(tcp::socket& sock) :
 
 void Connection::process() {
 
-    boost::asio::streambuf buffer;
-    boost::asio::read_until(socket, buffer, "\r\n\r\n");
-
-    std::istream is(&buffer);
-    Request request = parseRequest(is);
+    Request request = readRequest();
 
     auto content_p = std::unique_ptr<std::string>(new std::string("<!DOCTYPE HTML><html><head><title>Title</title></head><body><p>TEST</p></body></html>"));
     Response response(StatusCode::OK);
     response.setContent(std::move(content_p), ContentType::HTML);
-    std::string responseText = response.write();
 
-    boost::system::error_code ignored_error;
-    boost::asio::write(socket, boost::asio::buffer(responseText), ignored_error);
+    writeResponse(response);
 }
 
-Request Connection::parseRequest(std::istream& requestStream) {
+Request Connection::readRequest() {
 
-    // read request data
-    std::string method;
-    requestStream >> method;
+    boost::asio::streambuf buffer;
+    boost::asio::read_until(socket, buffer, "\r\n\r\n");
+    std::istream is{&buffer};
 
-    std::string url;
-    requestStream >> url;
+    return Request{is};
+}
 
-    Request request = Request{MethodUtils::parseMethod(method), url};
+void Connection::writeResponse(const Response& response) {
 
-    // ignore rest of the line first line
-    requestStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    boost::asio::streambuf buffer;
+    std::ostream output{&buffer};
+    response.write(output);
 
-    // all following lines contain headers
-    while(!requestStream.eof()) {
-        std::string header;
-        std::getline(requestStream, header);
-
-        std::size_t colonIndex = header.find(':');
-        if (colonIndex != std::string::npos) {
-            std::string name = header.substr(0, colonIndex);
-            std::string value = header.substr(colonIndex + 1, header.size());
-            request.addHeader(name, value);
-        }
-    }
-
-    return request;
-
+    boost::system::error_code ignored_error;
+    boost::asio::write(socket, buffer, ignored_error);
 }

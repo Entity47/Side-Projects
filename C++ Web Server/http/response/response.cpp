@@ -1,4 +1,6 @@
 
+#include <sstream>
+
 #include "response.hpp"
 
 Response::Response(StatusCode status) :
@@ -17,15 +19,19 @@ void Response::setContent(std::unique_ptr<std::string> inContent, ContentType ty
     }
 }
 
-std::string Response::write() {
+void Response::write(std::ostream& output) const {
 
     std::string message{"HTTP/1.1 " + StatusCodeMap::getDescription(statusCode) + "\r\n"};
-    message += headers.write();
+
+    for (auto header_entry : headers) {
+        message += header_entry.first + ": " + header_entry.second + "\r\n";
+    }
+
     message += "\r\n";
 
     if (content != nullptr) {
         message += *content;
     }
 
-    return message;
+    output << message;
 }

@@ -3,6 +3,7 @@
 #define RESPONSE_H
 
 #include <string>
+#include <ostream>
 #include <memory>
 
 #include "contentType.hpp"
@@ -20,7 +21,7 @@ private:
 public:
     Response(StatusCode status);
     void setContent(std::unique_ptr<std::string> inContent, ContentType type);
-    std::string write();
+    void write(std::ostream& output) const;
 
 };
 

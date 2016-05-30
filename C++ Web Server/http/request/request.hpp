@@ -3,6 +3,7 @@
 #define REQUEST_H
 
 #include <string>
+#include <istream>
 
 #include "../headers.hpp"
 #include "method.hpp"
@@ -15,8 +16,7 @@ private:
     Headers headers;
 
 public:
-    Request(Method m, std::string resource);
-    void addHeader(std::string name, std::string value);
+    Request(std::istream& requestStream);
     std::string toString();
 };
 
