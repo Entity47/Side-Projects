@@ -1,8 +1,10 @@
 
 #include "server.hpp"
+#include "settings/settings.hpp"
 
 int main() {
 
-    Server server(5000);
+    Settings settings;
+    Server server(settings);
     server.listen();
 }
