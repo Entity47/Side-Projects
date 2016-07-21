@@ -1,0 +1,16 @@
+# parsing
+calculator (parse text and calculate)
+roman numerals (parse text and convert to decimal)
+
+# databases
+simple key-value store
+relational database
+non-relational database
+
+# algorithms
+dijkstra’s algorithm
+
+# applications
+HTTP server
+networked chat server
+text editor
